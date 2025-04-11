@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct TaskMasters_GameApp: App {
+struct ConnectFourApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
