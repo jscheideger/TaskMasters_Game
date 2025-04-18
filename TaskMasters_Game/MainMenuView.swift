@@ -35,7 +35,7 @@ struct MainMenuView: View {
 
                 VStack(spacing: 16) {
                     // Resume Game – uses persistent instance
-                    
+
 
                     // New Game – generates fresh instance
                     NavigationLink(destination: ContentView(viewModel: ConnectFourViewModel())) {

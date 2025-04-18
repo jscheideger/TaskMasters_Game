@@ -1,5 +1,8 @@
+//
 //  ContentView.swift
 //  TaskMasters_Game
+//
+//  Created by Jesten Scheideger on 4/11/25.
 //
 //  UI for analytics, replay, and leaderboard(Sreeja Nama)
 //  UI enhancement: gradient background, styled inputs, cards for stats, animated tokens(Sreeja Nama)
@@ -49,9 +52,9 @@ struct ContentView: View {
                         .font(.headline)
 
                     HStack(spacing: 5) {
-                        ForEach(0..<7, id: \ .self) { col in
+                        ForEach(0..<7, id: \.self) { col in
                             VStack(spacing: 5) {
-                                ForEach((0..<6).reversed(), id: \ .self) { row in
+                                ForEach((0..<6).reversed(), id: \.self) { row in
                                     Circle()
                                         .foregroundColor(viewModel.colorFor(viewModel.board[col][row]))
                                         .frame(width: 50, height: 50)
@@ -80,7 +83,6 @@ struct ContentView: View {
                             .foregroundColor(.green)
                             .padding()
                     }
-
 
                     GameControlsView(viewModel: viewModel)
 
@@ -132,4 +134,8 @@ struct DraggableToken: View {
                 return NSItemProvider(object: NSString(string: player.rawValue))
             }
     }
+}
+
+#Preview {
+    ContentView(viewModel: ConnectFourViewModel())
 }

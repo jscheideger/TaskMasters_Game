@@ -16,7 +16,7 @@ enum GameState {
 class ConnectFourViewModel: ObservableObject {
     @Published private var model = ConnectFourModel()
     @Published var dragColumn: Int? = nil
-    
+
     //Track game state(Jesten/Sammer)
     @Published var gameState: GameState = .playing
 
@@ -42,11 +42,11 @@ class ConnectFourViewModel: ObservableObject {
     var winner: Player? {
         model.winner
     }
-    
+
     //block moves if pause or ended (Jesten/Sammer)
     func dropPiece(in column: Int) {
         guard gameState == .playing else { return }
-    
+
         if model.dropPiece(in: column) {
             SoundManager.shared.playSound(named: "drop")
 
@@ -78,23 +78,23 @@ class ConnectFourViewModel: ObservableObject {
         }
         objectWillChange.send()
     }
-    
+
     //pause support (Jesten/Sammer)
-    
+
     func pauseGame() {
         if winner == nil {
             gameState = .paused
         }
     }
-    
+
     //resume support (Jesten/Sammer)
     func resumeGame() {
         if winner == nil {
             gameState = .playing
         }
     }
-    
-    
+
+
     func resetGame() {
         model.reset()
         gameState = .playing //JS
