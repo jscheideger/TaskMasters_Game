@@ -20,6 +20,10 @@ class ConnectFourViewModel: ObservableObject {
     //Track game state(Jesten/Sammer)
     @Published var gameState: GameState = .playing
 
+class ConnectFourViewModel: ObservableObject {
+    @Published private var model = ConnectFourModel()
+    @Published var dragColumn: Int? = nil
+
     // Game Analytics  (Sreeja Nama)
     @Published var matchHistory: [MatchRecord] = []
     @Published var redWins = 0
@@ -47,6 +51,8 @@ class ConnectFourViewModel: ObservableObject {
     func dropPiece(in column: Int) {
         guard gameState == .playing else { return }
     
+
+    func dropPiece(in column: Int) {
         if model.dropPiece(in: column) {
             SoundManager.shared.playSound(named: "drop")
 
@@ -74,6 +80,8 @@ class ConnectFourViewModel: ObservableObject {
                                     moves: model.moveHistory
                                 )
                                 matchHistory.insert(match, at: 0)
+                let match = MatchRecord(winner: winner, date: Date(), moves: model.moveHistory)
+                matchHistory.insert(match, at: 0)
             }
         }
         objectWillChange.send()
@@ -98,6 +106,9 @@ class ConnectFourViewModel: ObservableObject {
     func resetGame() {
         model.reset()
         gameState = .playing //JS
+
+    func resetGame() {
+        model.reset()
         objectWillChange.send()
     }
 
