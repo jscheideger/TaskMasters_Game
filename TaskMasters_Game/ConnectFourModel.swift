@@ -25,6 +25,9 @@ struct Move: Codable {
 struct MatchRecord: Identifiable, Codable {
     let id = UUID()
     let winner: Player
+    let loser: Player
+    let winnerName: String
+    let loserName: String
     let date: Date
     let moves: [Move]
 }
@@ -33,7 +36,6 @@ struct ConnectFourModel {
     var board: [[Player?]] = Array(repeating: Array(repeating: nil, count: 6), count: 7)
     var currentPlayer: Player = .red
     var winner: Player? = nil
-    
     var moveHistory: [Move] = [] // Added by Sreeja Nama
 
     mutating func reset() {
