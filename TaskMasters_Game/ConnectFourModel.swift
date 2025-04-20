@@ -32,6 +32,7 @@ struct MatchRecord: Identifiable, Codable {
     let moves: [Move]
 }
 
+
 struct ConnectFourModel {
     var board: [[Player?]] = Array(repeating: Array(repeating: nil, count: 6), count: 7)
     var currentPlayer: Player = .red
