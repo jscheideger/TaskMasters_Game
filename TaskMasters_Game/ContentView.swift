@@ -1,14 +1,3 @@
-//
-//  ContentView.swift
-//  TaskMasters_Game
-//
-//  Created by Jesten Scheideger on 4/11/25.
-//
-//  UI for analytics, replay, and leaderboard(Sreeja Nama)
-//  UI enhancement: gradient background, styled inputs, cards for stats, animated tokens(Sreeja Nama)
-//Seperated Leaderboard/ MatchHistory to own screens uisng navigationlinks (Jesten)
-//Add token next to player name at all times(Jesten)
-
 import SwiftUI
 
 struct ContentView: View {
@@ -23,6 +12,7 @@ struct ContentView: View {
                         .font(.system(size: 36, weight: .bold))
                         .foregroundColor(.indigo)
 
+                    // Player name inputs
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Enter Player Names")
                             .font(.headline)
@@ -51,6 +41,7 @@ struct ContentView: View {
                     Text("Current Player: \(viewModel.currentPlayer.rawValue)")
                         .font(.headline)
 
+                    // Game board
                     HStack(spacing: 5) {
                         ForEach(0..<7, id: \.self) { col in
                             VStack(spacing: 5) {
@@ -76,6 +67,7 @@ struct ContentView: View {
 
                     DraggableToken(player: viewModel.currentPlayer)
 
+                    // Win message
                     if let winner = viewModel.winner {
                         let winnerName = winner == .red ? viewModel.redPlayerName : viewModel.yellowPlayerName
                         Text("\(winner.rawValue) \(winnerName) wins!")
@@ -88,6 +80,7 @@ struct ContentView: View {
 
                     Divider()
 
+                    // Navigation links
                     VStack(spacing: 15) {
                         NavigationLink(destination: MatchHistoryView(viewModel: viewModel)) {
                             Text("⏮️ Match History")

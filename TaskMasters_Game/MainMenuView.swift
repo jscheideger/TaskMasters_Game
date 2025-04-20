@@ -1,10 +1,3 @@
-//
-//  MainMenuView.swift
-//  TaskMasters_Game
-//
-//  Created by Jesten Scheideger on 4/18/25.
-
-
 import SwiftUI
 
 struct MainMenuView: View {
@@ -34,10 +27,7 @@ struct MainMenuView: View {
                     .padding()
 
                 VStack(spacing: 16) {
-                    // Resume Game – uses persistent instance
-
-
-                    // New Game – generates fresh instance
+                    // New Game – generates a fresh instance
                     NavigationLink(destination: ContentView(viewModel: ConnectFourViewModel())) {
                         Text("🆕 New Game")
                             .font(.headline)
@@ -84,6 +74,7 @@ struct MainMenuView: View {
         }
     }
 }
+
 
 
 
