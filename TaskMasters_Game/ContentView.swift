@@ -1,22 +1,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showBackConfirmation = false
     @ObservedObject var viewModel: ConnectFourViewModel
     @State private var dragOffset: CGSize = .zero
 
+
     var body: some View {
         NavigationView {
-            ScrollView {
+            ZStack {
                 VStack(spacing: 15) {
-                    Text("🎮 CONNECT FOUR")
-                        .font(.system(size: 36, weight: .bold))
-                        .foregroundColor(.indigo)
-
+                    
+                    
                     // Player name inputs
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("Enter Player Names")
                             .font(.headline)
-
+                        
                         HStack {
                             Label {
                                 TextField("Red", text: $viewModel.redPlayerName)
@@ -24,7 +25,7 @@ struct ContentView: View {
                             } icon: {
                                 Text(Player.red.rawValue)
                             }
-
+                            
                             Label {
                                 TextField("Yellow", text: $viewModel.yellowPlayerName)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -37,11 +38,14 @@ struct ContentView: View {
                         .cornerRadius(10)
                     }
                     .padding(.horizontal)
-
+                    
+              
+                    
                     Text("Current Player: \(viewModel.currentPlayer.rawValue)")
                         .font(.headline)
-
+                    
                     // Game board
+                    
                     HStack(spacing: 5) {
                         ForEach(0..<7, id: \.self) { col in
                             VStack(spacing: 5) {
@@ -54,6 +58,12 @@ struct ContentView: View {
                                         .transition(.move(edge: .top))
                                         .animation(.spring(), value: viewModel.board[col][row])
                                 }
+                                //added this because my trackpad SUCKS -Gannon
+                                .onTapGesture {
+                                    withAnimation {
+                                        viewModel.dropPiece(in: col)
+                                    }
+                                }
                                 .onDrop(of: ["public.text"], isTargeted: nil) { _ in
                                     withAnimation {
                                         viewModel.dropPiece(in: col)
@@ -64,46 +74,69 @@ struct ContentView: View {
                         }
                     }
                     .padding()
-
+                   
                     DraggableToken(player: viewModel.currentPlayer)
-
+              
+                    
                     // Win message
                     if let winner = viewModel.winner {
                         let winnerName = winner == .red ? viewModel.redPlayerName : viewModel.yellowPlayerName
                         Text("\(winner.rawValue) \(winnerName) wins!")
                             .font(.title)
                             .foregroundColor(.green)
-                            .padding()
+   
+                        
+                        
+                        
+                        
+                        Divider()
+                        
+                        // Navigation links
+                        HStack(spacing: 15) {
+                            NavigationLink(destination: MatchHistoryView(viewModel: viewModel)) {
+                                Text("⏮️ Match History")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue.opacity(0.3))
+                                    .cornerRadius(10)
+                            }
+                            
+                            NavigationLink(destination: LeaderboardView(viewModel: viewModel)) {
+                                Text("🏅 Leaderboard")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.purple.opacity(0.3))
+                                    .cornerRadius(10)
+                            }
+                        }
+                        .padding(.horizontal)
                     }
-
                     GameControlsView(viewModel: viewModel)
-
-                    Divider()
-
-                    // Navigation links
-                    VStack(spacing: 15) {
-                        NavigationLink(destination: MatchHistoryView(viewModel: viewModel)) {
-                            Text("⏮️ Match History")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue.opacity(0.3))
-                                .cornerRadius(10)
-                        }
-
-                        NavigationLink(destination: LeaderboardView(viewModel: viewModel)) {
-                            Text("🏅 Leaderboard")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.purple.opacity(0.3))
-                                .cornerRadius(10)
-                        }
-                    }
-                    .padding(.horizontal)
                 }
                 .padding()
             }
-            .navigationTitle("Connect Four")
+           
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    showBackConfirmation = true
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                    }
+                }
+            }
+        }
+        .alert("Are you sure you want to leave the game?", isPresented: $showBackConfirmation) {
+            Button("Leave", role: .destructive) {
+                presentationMode.wrappedValue.dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+
         .background(
             LinearGradient(
                 gradient: Gradient(colors: [.blue.opacity(0.3), .purple.opacity(0.2)]),
