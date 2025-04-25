@@ -1,10 +1,3 @@
-//
-//  LeaderboardView.swift
-//  TaskMasters_Game
-//
-//  Created by Jesten Scheideger on 4/18/25.
-//
-
 import SwiftUI
 
 struct LeaderboardView: View {
@@ -13,57 +6,68 @@ struct LeaderboardView: View {
     @StateObject private var dvm = DataViewModel()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("🏅 LEADERBOARD")
-                .font(.title)
-                .bold()
-                .padding(.bottom)
-            ScrollView{
-                ForEach(dvm.savedentries) { player in
-                    HStack {
-                        Text(player.name ?? "Unknown").bold()
-                        Spacer()
-                        Text("Wins: \(player.wins), Games: \(player.totalGames), Win Rate: \(String(format: "%.0f", player.winRate * 100))%")
-                            .font(.caption)
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.1))
-                    .cornerRadius(10)
-                }
-            }
-            Button("Clear Scores", systemImage: "trash") {
-
-                showClearConfirmation = true
-                
-            }
-            .padding(7)
-            .background(Color.yellow.opacity(0.8))
-            .foregroundColor(.black)
-            .cornerRadius(10)
+        ZStack {
+            // Apply background gradient
+            Theme.backgroundGradient()
+                .edgesIgnoringSafeArea(.all)
             
-            .alert("Are you sure you want to leave the game?", isPresented: $showClearConfirmation) {
-
-                Button("Cancel", role: .cancel) {}
-                Button("Clear", role: .destructive) {
-                    dvm.clearAll()  // Call the clearAll method if confirmed
+            VStack(alignment: .leading, spacing: 8) {
+                Text("🏅 LEADERBOARD")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding(.bottom)
+                    .shadow(color: .black, radius: 1)
+                    
+                ScrollView {
+                    ForEach(dvm.savedentries) { player in
+                        HStack {
+                            Text(player.name ?? "Unknown")
+                                .bold()
+                                .foregroundColor(.black)
+                            Spacer()
+                            Text("Wins: \(player.wins), Games: \(player.totalGames), Win Rate: \(String(format: "%.0f", player.winRate * 100))%")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(10)
+                        .shadow(color: .black.opacity(0.1), radius: 3)
+                        .padding(.bottom, 5)
                     }
+                }
+                
+                Button(action: {
+                    showClearConfirmation = true
+                }) {
+                    Label("Clear Scores", systemImage: "trash")
+                        .foregroundColor(.black)
+                        .padding(10)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.orange.opacity(0.9))
+                        .cornerRadius(10)
+                        .shadow(color: .black.opacity(0.2), radius: 3)
+                }
+                .padding(.top, 10)
+                .alert("Are you sure you want to clear all scores?", isPresented: $showClearConfirmation) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Clear", role: .destructive) {
+                        dvm.clearAll()
+                    }
+                }
 
+                Spacer()
             }
-
-            Spacer()
+            .padding()
+            .onAppear {
+                // Refresh the data whenever the leaderboard appears
+                dvm.fetchPlayerData()
+            }
         }
-        .padding()
-
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [.purple.opacity(0.2), .blue.opacity(0.2)]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
-        
     }
 }
+
 #Preview {
     LeaderboardView(viewModel: .init())
 }
