@@ -20,7 +20,7 @@ struct GameControlsView: View {
                 }
             }) {
                 Text(viewModel.gameState == .paused ? "▶️ Resume" : "⏸️ Pause")
-                    .padding()
+                    .padding(8)
                     .frame(maxWidth: .infinity)
                     .background(Color.yellow.opacity(0.8))
                     .foregroundColor(.black)
@@ -32,7 +32,7 @@ struct GameControlsView: View {
                 SoundManager.shared.playSound(named: "win")
             }) {
                 Text("🔁 Restart")
-                    .padding()
+                    .padding(8)
                     .frame(maxWidth: .infinity)
                     .background(Color.red.opacity(0.8))
                     .foregroundColor(.white)

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainMenuView: View {
+    @State private var showNewGameConfirmation = false
     @StateObject private var gameViewModel = ConnectFourViewModel()
 
     var body: some View {
@@ -36,6 +37,7 @@ struct MainMenuView: View {
                             .background(Color.green.opacity(0.8))
                             .foregroundColor(.white)
                             .cornerRadius(10)
+                        
                     }
 
                     NavigationLink(destination: MatchHistoryView(viewModel: gameViewModel)) {
@@ -77,4 +79,7 @@ struct MainMenuView: View {
 
 
 
+#Preview {
+    MainMenuView()
+}
 
